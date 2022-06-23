@@ -13,7 +13,7 @@ jobs:
       - name: Run Multiple GitHub Runners in Runner
         uses: dougcalobrisi/nested-github-runners-action@v0.9
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           runners: 3
   job1:
     runs-on: nested-${{ github.run_id }}
