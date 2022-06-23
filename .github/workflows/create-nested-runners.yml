@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  create-nested-runners:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Multiple GitHub Runners in Runner
+        uses: dougcalobrisi/nested-github-runners-action@v0.9
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          runners: 3
+  job1:
+    runs-on: nested-${{ github.run_id }}
+    steps:
+      - name: echo hostname
+        run: echo `hostname`
+  job-matrix:
+    runs-on: nested-${{ github.run_id }}
+    strategy:
+      matrix:
+        node-version: [16.x, 14.x]
+      
+    steps:
+      - name: install node ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: node -p 'console.log(`foobar`)'
